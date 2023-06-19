@@ -1,0 +1,61 @@
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_test", "rust_doc_test")
+
+RG_DEPS = [
+    "@crate_index//:bstr",
+    "@crate_index//:lazy_static",
+    "@crate_index//:log",
+    "@crate_index//:regex",
+    "@crate_index//:serde_json",
+    "@crate_index//:termcolor",
+    "@crate_index//:clap",
+    "//crates/grep",
+    "//crates/ignore",
+]
+
+rust_binary(
+    name = "rg",
+    srcs = glob([
+        "crates/core/**/*.rs",
+    ]),
+    # aliases = aliases(),
+    deps = RG_DEPS,
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+rust_test(
+    name = "tests",
+    crate = ":rg", 
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_test(
+    name = "integration",
+    srcs = glob([
+        "tests/**/*.rs",
+    ]),
+    deps = RG_DEPS + all_crate_deps(
+        normal_dev = True,
+    ),
+    data = glob([
+        "tests/data/**",
+    ]),
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True
+    ),
+    crate_root = "tests/tests.rs",
+)
+
+rust_doc_test(
+    name = "doctests",
+    crate = ":rg",
+)

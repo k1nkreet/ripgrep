@@ -1,0 +1,92 @@
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_binary", "rust_doc_test")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+
+IGNORE_DEPS = [
+    "@crate_index//:lazy_static",
+    "@crate_index//:log",
+    "@crate_index//:memchr",
+    "@crate_index//:regex",
+    "@crate_index//:same-file",
+    "@crate_index//:thread_local",
+    "@crate_index//:walkdir",
+    "//crates/globset",
+]
+
+rust_library(
+    name = "ignore",
+    srcs = glob([
+        "src/**/*.rs",
+    ]),
+    # deps = all_crate_deps(
+    #     normal = True,
+    # ) + [
+    #     "//crates/globset",
+    # ],
+    deps = IGNORE_DEPS,
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+rust_test(
+    name = "test",
+    crate = ":ignore",
+    aliases = aliases(
+        normal_dev = True,
+        proc_macro_dev = True,
+    ),
+    deps = all_crate_deps(
+        normal_dev = True,
+    ),
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_doc_test(
+    name = "doctest",
+    crate = ":ignore",
+)
+
+expand_template(
+    name = "modify_for_bazel",
+    out = "gitignore_matched_path_or_any_parents_tests.rs",
+    substitutions = {
+        "tests/gitignore_matched_path_or_any_parents_tests.gitignore": 
+        "crates/ignore/tests/gitignore_matched_path_or_any_parents_tests.gitignore",
+    },
+    template = "tests/gitignore_matched_path_or_any_parents_tests.rs",
+)
+
+rust_test(
+    name = "gitignore_matched_path_or_any_parents_test",
+    srcs = ["gitignore_matched_path_or_any_parents_tests.rs"],
+    data = glob([
+        "tests/**/*.gitignore",
+    ]),
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+        ":ignore",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_binary(
+    name = "examples",
+    srcs = glob([
+        "examples/**/*.rs",
+    ]),
+    deps = IGNORE_DEPS + all_crate_deps(
+        normal_dev = True
+    ) + [
+        ":ignore",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True
+    ),
+)

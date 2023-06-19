@@ -1,0 +1,52 @@
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_doc_test")
+
+rust_library(
+    name = "grep-matcher",
+    srcs = glob([
+        "src/**/*.rs",
+    ]),
+    aliases = aliases(),
+    deps = all_crate_deps(
+        normal = True,
+    ),
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+rust_test(
+    name = "unit-tests",
+    crate = ":grep-matcher",
+    aliases = aliases(
+        normal_dev = True,
+        proc_macro_dev = True,
+    ),
+    deps = all_crate_deps(
+        normal_dev = True,
+    ),
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_test(
+    name = "tests",
+    srcs = glob([
+        "tests/**/*.rs",
+    ]),
+    deps = all_crate_deps(
+        normal_dev = True
+    ) + [
+        ":grep-matcher",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True
+    ),
+)
+
+rust_doc_test(
+    name = "doctests",
+    crate = ":grep-matcher",
+)

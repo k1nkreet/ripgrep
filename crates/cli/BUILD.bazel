@@ -1,0 +1,41 @@
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_doc_test")
+
+rust_library(
+    name = "grep-cli",
+    srcs = glob([
+        "src/**/*.rs",
+    ]),
+    deps = [
+        "@crate_index//:bstr",
+        "//crates/globset",
+        "@crate_index//:lazy_static",
+        "@crate_index//:log",
+        "@crate_index//:regex",
+        "@crate_index//:same-file",
+        "@crate_index//:termcolor",
+    ],
+
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+rust_test(
+    name = "test",
+    crate = ":grep-cli",
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+        "//crates/globset",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_doc_test(
+    name = "doctests",
+    crate = ":grep-cli",
+)

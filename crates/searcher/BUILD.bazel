@@ -1,0 +1,60 @@
+load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_binary", "rust_doc_test")
+
+rust_library(
+    name = "grep-searcher",
+    srcs = glob([
+        "src/**/*.rs",
+    ]),
+    aliases = aliases(),
+    deps = all_crate_deps(
+        normal = True,
+    ) + [
+        "//crates/matcher:grep-matcher",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+rust_test(
+    name = "test",
+    crate = ":grep-searcher",
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro_dev = True,
+    ),
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+        "//crates/regex:grep-regex",
+    ],
+    proc_macro_deps = all_crate_deps(
+        proc_macro_dev = True,
+    ),
+)
+
+rust_doc_test(
+    name = "doctests",
+    crate = ":grep-searcher",
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+        "//crates/regex:grep-regex",
+    ],
+)
+
+rust_binary(
+    name = "search-stdin",
+    srcs = glob([
+        "examples/**/*.rs",
+    ]),
+    deps = all_crate_deps(
+        normal_dev = True,
+    ) + [
+        ":grep-searcher",
+        "//crates/regex:grep-regex",
+    ],
+)

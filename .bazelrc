@@ -1,0 +1,2 @@
+build --@rules_rust//rust/toolchain/channel=nightly
+test --test_output=errors
