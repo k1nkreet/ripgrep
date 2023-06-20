@@ -13,14 +13,9 @@ bazel_skylib_workspace()
 
 http_archive(
     name = "rules_rust",
-    sha256 = "50272c39f20a3a3507cb56dcb5c3b348bda697a7d868708449e2fa6fb893444c",
-    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.22.0/rules_rust-v0.22.0.tar.gz"],
+    sha256 = "48e715be2368d79bc174efdb12f34acfc89abd7ebfcbffbc02568fcb9ad91536",
+    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.24.0/rules_rust-v0.24.0.tar.gz"],
 )
-
-# local_repository(
-#     name = "rules_rust",
-#     path = "../../rules_rust",
-# )
 
 load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
 
@@ -32,7 +27,6 @@ rust_register_toolchains(
 
 load("@rules_rust//crate_universe:repositories.bzl", "crate_universe_dependencies")
 
-# crate_universe_dependencies(bootstrap=True)
 crate_universe_dependencies()
 
 load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
@@ -41,19 +35,17 @@ crates_repository(
     name = "crate_index",
     cargo_lockfile = "//:Cargo.lock",
     lockfile = "//:cargo-bazel-lock.json",
-    # manifests = ["//:Cargo.toml"],
-    # generator = "@cargo_bazel_bootstrap//:cargo-bazel",
     manifests = [
         "//:Cargo.toml",
-        "//crates/globset:Cargo.toml",
-        "//crates/grep:Cargo.toml",
-        "//crates/cli:Cargo.toml",
-        "//crates/matcher:Cargo.toml",
-        "//crates/pcre2:Cargo.toml",
+        "//:crates/globset/Cargo.toml",
+        "//:crates/grep/Cargo.toml",
+        "//:crates/cli/Cargo.toml",
+        "//:crates/matcher/Cargo.toml",
+        "//:crates/pcre2/Cargo.toml",
         "//:crates/printer/Cargo.toml",
         "//:crates/regex/Cargo.toml",
         "//:crates/searcher/Cargo.toml",
-        "//crates/ignore:Cargo.toml",
+        "//:crates/ignore/Cargo.toml",
     ],
 )
 

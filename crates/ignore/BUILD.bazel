@@ -18,12 +18,12 @@ rust_library(
     srcs = glob([
         "src/**/*.rs",
     ]),
-    # deps = all_crate_deps(
-    #     normal = True,
-    # ) + [
-    #     "//crates/globset",
-    # ],
-    deps = IGNORE_DEPS,
+    aliases = aliases(),
+    deps = all_crate_deps(
+        normal = True,
+    ) + [
+        "//crates/globset",
+    ],
     proc_macro_deps = all_crate_deps(
         proc_macro = True,
     ),
@@ -81,12 +81,20 @@ rust_binary(
     srcs = glob([
         "examples/**/*.rs",
     ]),
-    deps = IGNORE_DEPS + all_crate_deps(
-        normal_dev = True
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    deps = all_crate_deps(
+        normal = True,
+        normal_dev = True,
     ) + [
         ":ignore",
     ],
     proc_macro_deps = all_crate_deps(
-        proc_macro_dev = True
+        proc_macro = True,
+        proc_macro_dev = True,
     ),
 )

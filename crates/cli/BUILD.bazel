@@ -6,16 +6,10 @@ rust_library(
     srcs = glob([
         "src/**/*.rs",
     ]),
-    deps = [
-        "@crate_index//:bstr",
+    aliases = aliases(),
+    deps = all_crate_deps() + [
         "//crates/globset",
-        "@crate_index//:lazy_static",
-        "@crate_index//:log",
-        "@crate_index//:regex",
-        "@crate_index//:same-file",
-        "@crate_index//:termcolor",
     ],
-
     proc_macro_deps = all_crate_deps(
         proc_macro = True,
     ),
@@ -25,6 +19,10 @@ rust_library(
 rust_test(
     name = "test",
     crate = ":grep-cli",
+    aliases = aliases(
+        normal_dev = True,
+        proc_macro_dev = True,
+    ),
     deps = all_crate_deps(
         normal_dev = True,
     ) + [

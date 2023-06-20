@@ -8,9 +8,7 @@ rust_library(
         "src/**/*.rs",
     ]),
     aliases = aliases(),
-    deps = all_crate_deps(
-        normal = True,
-    ) + [
+    deps = all_crate_deps() + [
         "//crates/matcher:grep-matcher",
     ],
     proc_macro_deps = all_crate_deps(

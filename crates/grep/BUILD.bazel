@@ -48,13 +48,23 @@ rust_binary(
     srcs = glob([
         "examples/**/*.rs",
     ]),
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
     deps = all_crate_deps(
-        normal_dev = True
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
     ) + [
         ":grep",
     ],
     proc_macro_deps = all_crate_deps(
-        proc_macro_dev = True
+        proc_macro = True,
+        proc_macro_dev = True,
     ),
 )
 
