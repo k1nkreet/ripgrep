@@ -2,6 +2,8 @@ load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_test", "rust_doc_test")
 load("@rules_rust//cargo:defs.bzl", "cargo_build_script")
 
+exports_files(["rustfmt.toml"])
+
 cargo_build_script(
     name = "build",
     srcs = [
