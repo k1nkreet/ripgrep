@@ -2,17 +2,6 @@ load("@crate_index//:defs.bzl", "aliases", "all_crate_deps")
 load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test", "rust_binary", "rust_doc_test")
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 
-IGNORE_DEPS = [
-    "@crate_index//:lazy_static",
-    "@crate_index//:log",
-    "@crate_index//:memchr",
-    "@crate_index//:regex",
-    "@crate_index//:same-file",
-    "@crate_index//:thread_local",
-    "@crate_index//:walkdir",
-    "//crates/globset",
-]
-
 rust_library(
     name = "ignore",
     srcs = glob([
